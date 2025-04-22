@@ -1,0 +1,2335 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[trenches cooked]™</title>
+    <link rel="shortcut icon" href="images/TC.png" type="image/svg+xml">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+      :root {
+        --primary: #ff2d55;
+        --primary-dark: #d1223d;
+        --dark: #0a0a0a;
+        --darker: #050505;
+        --light: #f5f5f1;
+        --gray: #808080;
+        --dark-gray: #2a2a2a;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Netflix Sans", "Helvetica Neue", Helvetica, Arial,
+          sans-serif;
+      }
+
+      @font-face {
+        font-family: "Netflix Sans";
+        font-weight: 100;
+        src: url(fonts/NetflixSans_W_Th.woff2)
+            format("woff2"),
+          url(fonts/NetflixSans_W_Th.woff)
+            format("woff");
+      }
+
+      @font-face {
+        font-family: "Netflix Sans";
+        font-weight: 300;
+        src: url(fonts/NetflixSans_W_Lt.woff2)
+            format("woff2"),
+          url(fonts/NetflixSans_W_Lt.woff)
+            format("woff");
+      }
+
+      @font-face {
+        font-family: "Netflix Sans";
+        font-weight: 400;
+        src: url(fonts/NetflixSans_W_Rg.woff2)
+            format("woff2"),
+          url(fonts/NetflixSans_W_Rg.woff)
+            format("woff");
+      }
+
+      @font-face {
+        font-family: "Netflix Sans";
+        font-weight: 700;
+        src: url(fonts/NetflixSans_W_Md.woff2)
+            format("woff2"),
+          url(fonts/NetflixSans_W_Md.woff)
+            format("woff");
+      }
+
+      @font-face {
+        font-family: "Netflix Sans";
+        font-weight: 900;
+        src: url(fonts/NetflixSans_W_Bd.woff2)
+            format("woff2"),
+          url(fonts/NetflixSans_W_Bd.woff)
+            format("woff");
+      }
+
+      body {
+        background-color: var(--dark);
+        color: var(--light);
+        overflow-x: hidden;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--darker);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 4px;
+      }
+
+      /* Header */
+      header {
+        display: none; /* Скрываем хедер по умолчанию */
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 4%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        transition: var(--transition);
+      }
+
+      header.scrolled {
+        background-color: var(--darker);
+        box-shadow: var(--shadow);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        color: var(--primary);
+        font-size: 2.5rem;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .logo span {
+        color: var(--light);
+        font-weight: 300;
+      }
+
+      .logo i {
+        margin-right: 10px;
+        font-size: 2rem;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+      }
+
+      nav ul li {
+        margin-left: 25px;
+        position: relative;
+      }
+
+      nav ul li a {
+        color: var(--light);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.1rem;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+      }
+
+      nav ul li a i {
+        margin-right: 8px;
+      }
+
+      nav ul li a:hover {
+        color: var(--primary);
+      }
+
+      nav ul li a.active {
+        color: var(--primary);
+      }
+
+      nav ul li a.active::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary);
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+      }
+
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        margin-left: 20px;
+        cursor: pointer;
+        object-fit: cover;
+        border: 1px solid var(--primary);
+      }
+
+      /* Welcome Screen */
+      .welcome-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--darker);
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+
+      .welcome-content {
+        text-align: center;
+        max-width: 800px;
+        padding: 0 20px;
+      }
+
+      .welcome-screen h1 {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        color: var(--primary);
+      }
+
+      .welcome-screen p {
+        font-size: 1.5rem;
+        margin-bottom: 40px;
+      }
+
+      .welcome-screen.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Main Content */
+      .main-content {
+        display: none; /* Скрываем основной контент по умолчанию */
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 100vh;
+        min-height: 700px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0 4%;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.8) 0%,
+          rgba(0, 0, 0, 0) 50%,
+          rgba(0, 0, 0, 0.8) 100%
+        );
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        animation: fadeInUp 1s ease-out;
+      }
+
+      .hero h1 {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        line-height: 1.1;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .hero .highlight {
+        color: var(--primary);
+        font-weight: 900;
+      }
+
+      .hero p {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        font-weight: 300;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 45, 85, 0.3);
+      }
+
+      .btn-secondary {
+        background-color: rgba(109, 109, 110, 0.7);
+        color: white;
+        border: none;
+      }
+
+      .btn-secondary:hover {
+        background-color: rgba(109, 109, 110, 0.9);
+        transform: translateY(-2px);
+      }
+
+      .btn i {
+        margin-right: 10px;
+      }
+
+      /* Info Cards */
+      .info-cards {
+        display: flex;
+        gap: 20px;
+        margin-top: 40px;
+      }
+
+      .info-card {
+        background-color: rgba(42, 42, 42, 0.7);
+        padding: 20px;
+        border-radius: 8px;
+        width: 200px;
+        transition: var(--transition);
+      }
+
+      .info-card:hover {
+        transform: translateY(-5px);
+        background-color: rgba(42, 42, 42, 0.9);
+      }
+
+      .info-card i {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+
+      .info-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+      }
+
+      .info-card p {
+        font-size: 0.9rem;
+        color: var(--gray);
+      }
+
+      /* Carousel */
+      .carousel-section {
+        padding: 50px 4%;
+        position: relative;
+        margin-top: -100px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        position: relative;
+        padding-left: 15px;
+      }
+
+      .section-title::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background-color: var(--primary);
+      }
+
+      .view-all {
+        color: var(--gray);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: var(--transition);
+      }
+
+      .view-all:hover {
+        color: var(--primary);
+      }
+
+      .carousel-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 20px 0;
+        gap: 15px;
+      }
+
+      .carousel-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .carousel-item {
+        flex: 0 0 auto;
+        width: 280px;
+        transition: var(--transition);
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .carousel-item:hover {
+        transform: scale(1.05);
+        z-index: 10;
+      }
+
+      .carousel-item:hover .carousel-item-info {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .carousel-item img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .carousel-item-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.9) 0%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        padding: 20px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: var(--transition);
+        display: none;
+      }
+
+      .carousel-item h3 {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+      }
+
+      .carousel-item p {
+        font-size: 0.8rem;
+        color: var(--gray);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: calc(100% - 8%);
+        display: flex;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+
+      .carousel-button {
+        background-color: rgba(20, 20, 20, 0.7);
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        width: 40px;
+        height: 80px;
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        transition: var(--transition);
+        opacity: 0;
+      }
+
+      .carousel-section:hover .carousel-button {
+        opacity: 1;
+      }
+
+      .carousel-button:hover {
+        background-color: rgba(20, 20, 20, 0.9);
+        color: var(--primary);
+      }
+
+      /* Video Categories */
+      .categories {
+        padding: 50px 4%;
+      }
+
+      .category {
+        margin-bottom: 60px;
+      }
+
+      .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 25px;
+      }
+
+      .video-card {
+        position: relative;
+        cursor: pointer;
+        transition: var(--transition);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+      }
+
+      .video-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .video-card:hover .video-overlay {
+        opacity: 1;
+      }
+
+      .video-card img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.9) 0%,
+          rgba(0, 0, 0, 0.3) 50%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        opacity: 0;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 20px;
+        display: none;
+      }
+
+      .video-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+        transform: translateY(20px);
+        transition: var(--transition);
+        transition-delay: 0.1s;
+      }
+
+      .video-card p {
+        font-size: 0.9rem;
+        color: var(--gray);
+        transform: translateY(20px);
+        transition: var(--transition);
+        transition-delay: 0.2s;
+        margin-bottom: 15px;
+      }
+
+      .video-card:hover h3,
+      .video-card:hover p {
+        transform: translateY(0);
+      }
+
+      .video-actions {
+        display: flex;
+        gap: 10px;
+        transform: translateY(20px);
+        transition: var(--transition);
+        transition-delay: 0.3s;
+      }
+
+      .video-card:hover .video-actions {
+        transform: translateY(0);
+      }
+
+      .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: rgba(42, 42, 42, 0.7);
+        border: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .action-btn:hover {
+        background-color: var(--primary);
+        transform: scale(1.1);
+      }
+
+      /* Featured Section */
+      .featured {
+        padding: 100px 4%;
+        background: linear-gradient(
+          to bottom,
+          var(--darker) 0%,
+          var(--dark) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .featured::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.1;
+        z-index: 0;
+      }
+
+      .featured-content {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 50px;
+      }
+
+      .featured-image {
+        flex: 1;
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .featured-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .featured-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: var(--primary);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      .featured-info {
+        flex: 1;
+      }
+
+      .featured-info h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        line-height: 1.2;
+      }
+
+      .featured-info p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        color: var(--gray);
+      }
+
+      .featured-stats {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        color: var(--gray);
+      }
+
+      /* Video Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal.show {
+        opacity: 1;
+        display: flex;
+      }
+
+      .modal-content {
+        width: 90%;
+        max-width: 1200px;
+        position: relative;
+        background-color: var(--darker);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+      }
+
+      .modal.show .modal-content {
+        transform: scale(1);
+      }
+
+      .modal-header {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--dark);
+        border-bottom: 1px solid var(--dark-gray);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        color: var(--gray);
+        font-size: 1.8rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .close-modal:hover {
+        color: var(--primary);
+        transform: rotate(90deg);
+      }
+
+      .modal-body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-video {
+        height: 0;
+        padding-bottom: 410px;
+        position: relative;
+      }
+
+      .modal-video iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .modal-info {
+        padding: 30px;
+        display: flex;
+        gap: 30px;
+      }
+
+      .modal-poster {
+        flex: 0 0 300px;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .modal-poster img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .modal-details {
+        flex: 1;
+      }
+
+      .modal-meta {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        align-items: center;
+      }
+
+      .modal-rating {
+        display: flex;
+        align-items: center;
+        color: var(--primary);
+        font-weight: bold;
+      }
+
+      .modal-rating i {
+        margin-right: 5px;
+      }
+
+      .modal-year {
+        color: var(--gray);
+      }
+
+      .modal-duration {
+        background-color: var(--dark-gray);
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+      }
+
+      .modal-description {
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .modal-tags {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .modal-tag {
+        background-color: var(--dark-gray);
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 15px;
+      }
+
+      /* Footer */
+      footer {
+        display: none; /* Скрываем футер по умолчанию */
+        background-color: var(--darker);
+        padding: 70px 4% 30px;
+        border-top: 1px solid var(--dark-gray);
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+      }
+
+      .footer-column h3 {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background-color: var(--primary);
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 10px;
+      }
+
+      .footer-links a {
+        color: var(--gray);
+        text-decoration: none;
+        transition: var(--transition);
+        font-size: 0.9rem;
+      }
+
+      .footer-links a:hover {
+        color: var(--primary);
+        padding-left: 5px;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .social-links a {
+        color: var(--gray);
+        font-size: 1.2rem;
+        transition: var(--transition);
+      }
+
+      .social-links a:hover {
+        color: var(--primary);
+        transform: translateY(-3px);
+      }
+
+      .copyright {
+        text-align: center;
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid var(--dark-gray);
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      /* Responsive */
+      @media (max-width: 1200px) {
+        .featured-content {
+          flex-direction: column;
+        }
+
+        .modal-info {
+          flex-direction: column;
+        }
+
+        .modal-poster {
+          flex: 0 0 auto;
+          max-width: 300px;
+          margin: 0 auto;
+        }
+      }
+
+      @media (max-width: 992px) {
+        .hero h1 {
+          font-size: 3.5rem;
+        }
+
+        .welcome-screen h1 {
+          font-size: 3rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 20px;
+        }
+
+        .logo {
+          font-size: 1.8rem;
+        }
+
+        nav ul li {
+          margin-left: 15px;
+        }
+
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.2rem;
+        }
+
+        .welcome-screen h1 {
+          font-size: 2.5rem;
+        }
+
+        .welcome-screen p {
+          font-size: 1.2rem;
+        }
+
+        .btn {
+          padding: 10px 20px;
+          font-size: 1rem;
+        }
+
+        .info-cards {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .video-grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+
+        .video-card img {
+          height: 220px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .hero-buttons {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .welcome-buttons {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .modal-video {
+          padding-bottom: 75%;
+        }
+      }
+
+      /* Video Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal.show {
+        opacity: 1;
+        display: flex;
+      }
+
+      .modal-content {
+        width: 90%;
+        max-width: 1100px;
+        position: relative;
+        background-color: var(--darker);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        transform: scale(0.95);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .modal.show .modal-content {
+        transform: scale(1);
+      }
+
+      .modal-header {
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(
+          to right,
+          var(--primary-dark),
+          var(--primary)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .modal-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+
+      .close-modal:hover {
+        color: var(--light);
+        background-color: rgba(0, 0, 0, 0.2);
+        transform: rotate(90deg) scale(1.1);
+      }
+
+      .modal-body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-video {
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        position: relative;
+        background-color: #000;
+      }
+
+      .modal-video iframe,
+      .modal-video video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .modal-info {
+        padding: 30px;
+        display: flex;
+        gap: 30px;
+        background-color: var(--dark);
+      }
+
+      .modal-poster {
+        flex: 0 0 280px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transform: translateY(-50px);
+        border: 3px solid var(--light);
+        height: 420px;
+      }
+
+      .modal-poster img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .modal-details {
+        flex: 1;
+        padding-top: 20px;
+      }
+
+      .modal-meta {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 25px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .modal-rating {
+        display: flex;
+        align-items: center;
+        color: var(--primary);
+        font-weight: bold;
+        font-size: 1.1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 6px 12px;
+        border-radius: 20px;
+      }
+
+      .modal-rating i {
+        margin-right: 8px;
+        color: gold;
+      }
+
+      .modal-year {
+        color: var(--light);
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .modal-duration {
+        background-color: var(--primary-dark);
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: white;
+      }
+
+      .modal-description {
+        line-height: 1.7;
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .modal-tags {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .modal-tag {
+        background-color: var(--primary-dark);
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: white;
+        transition: var(--transition);
+      }
+
+      .modal-tag:hover {
+        background-color: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .modal-actions .btn {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        border-radius: 30px;
+      }
+
+      .modal-actions .btn i {
+        margin-right: 8px;
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .modal-info {
+          flex-direction: column;
+        }
+
+        .modal-poster {
+          flex: 0 0 auto;
+          max-width: 300px;
+          margin: -50px auto 0;
+          transform: none;
+          height: 350px;
+        }
+
+        .modal-details {
+          padding-top: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .modal-header {
+          padding: 15px 20px;
+        }
+
+        .modal-title {
+          font-size: 1.5rem;
+        }
+
+        .modal-info {
+          padding: 20px;
+        }
+
+        .modal-actions {
+          flex-wrap: wrap;
+        }
+
+        .modal-actions .btn {
+          flex: 1;
+          min-width: 120px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .modal-content {
+          width: 95%;
+        }
+
+        .modal-poster {
+          width: 100%;
+          height: auto;
+          max-width: none;
+        }
+
+        .modal-meta {
+          gap: 10px;
+        }
+
+        .modal-actions .btn {
+          padding: 10px 15px;
+          font-size: 1rem;
+        }
+      }
+
+      .logoCon {
+        width: 500px;
+        height: auto;
+      }
+
+      .logoCon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-content">
+        <div class="logoCon"><img src="images/TW.png" alt=""></div>
+        <p>Endless brainrot entertainment for cooked trenches.</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="startTrial">
+            <i class="fas fa-play"></i> Start Free Trial
+          </button>
+          <button class="btn btn-secondary" id="learnMore">
+            <i class="fas fa-info-circle"></i> Learn More
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content (скрыто по умолчанию) -->
+    <div class="main-content" id="mainContent">
+      <header>
+        <div class="logoCon"><img src="images/TW.png" alt=""></div>
+        <nav>
+          <ul>
+            <li>
+              <a href="https://t.me/TrenchesCooked" class="active">Telegram</a>
+            </li>
+            <li>
+              <a href="https://x.com/TrenchesCooked" class="active">X</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-search"></i> Search</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <div class="hero-content">
+          <h1>Premium <span class="highlight">Brainrot</span> Experience</h1>
+          <p>Brain sludge TV for microwave-aged millennials.</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary">
+              <i class="fas fa-play"></i> Watch Now
+            </button>
+            <button class="btn btn-secondary">
+              <i class="fas fa-info-circle"></i> Learn More
+            </button>
+          </div>
+          <div class="info-cards">
+            <div class="info-card">
+              <i class="fas fa-globe"></i>
+              <h3>International brainrot</h3>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-bolt"></i>
+              <h3>Instant brain melting</h3>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-lock-open"></i>
+              <h3>Become a schizophrenic</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="carousel-section">
+        <div class="section-header">
+          <h2 class="section-title">Cooked</h2>
+          <a href="#" class="view-all">View All</a>
+        </div>
+        <div class="carousel-container" id="trendingCarousel">
+          <div class="carousel-item">
+            <img src="images/1.jpg" alt="Italian Brainrot">
+            <div class="carousel-item-info">
+              <h3>Italian Zoomer</h3>
+              <p>Watch this Italian zoomer lose his mind over simple things</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="images/2.jpg" alt="Chinese Brainrot">
+            <div class="carousel-item-info">
+              <h3>Chinese TikToker</h3>
+              <p>The most cooked content from Chinese social media</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="images/3.jpg" alt="American Brainrot">
+            <div class="carousel-item-info">
+              <h3>Florida Man</h3>
+              <p>Classic Florida man moments that defy logic</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="images/4.jpg" alt="Russian Brainrot">
+            <div class="carousel-item-info">
+              <h3>Russian Gopnik</h3>
+              <p>Slavic energy at its finest</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="images/5.jpg" alt="Brazilian Brainrot">
+            <div class="carousel-item-info">
+              <h3>Brazilian Funk</h3>
+              <p>When the funk hits just right</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="images/6.jpg" alt="Indian Brainrot">
+            <div class="carousel-item-info">
+              <h3>Indian TikTok</h3>
+              <p>Bollywood meets internet culture</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="images/7.png" alt="Italian Brainrot">
+            <div class="carousel-item-info">
+              <h3>Italian Zoomer #2</h3>
+              <p>Even more Italian zoomer madness</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-button" id="prevTrending">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="carousel-button" id="nextTrending">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <section class="categories">
+        <div class="category">
+          <div class="section-header">
+            <h2 class="section-title">International Brainrot</h2>
+            <a href="#" class="view-all">View All</a>
+          </div>
+          <div class="video-grid">
+            <div class="video-card" data-video="videoplayback.mp4" data-title="Italian Zoomer #1" data-description="Watch this Italian zoomer lose his mind over simple things. Pure unadulterated brainrot from the streets of Italy." data-year="2024" data-rating="4.5" data-duration="0:42" data-tags="italian,zoom,funny">
+              <img src="images/z.png" alt="Italian Brainrot">
+              <div class="video-overlay">
+                <h3>Italian Zoomer #1</h3>
+                <p>
+                  Watch this Italian zoomer lose his mind over simple things
+                </p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="videoplayback1.mp4" data-title="Chinese TikTok Compilation" data-description="The most cooked content from Chinese social media. You won't believe what these creators come up with." data-year="2023" data-rating="4.2" data-duration="2:15" data-tags="chinese,tiktok,compilation">
+              <img src="images/x.png" alt="Chinese Brainrot">
+              <div class="video-overlay">
+                <h3>Chinese TikTok Compilation</h3>
+                <p>The most cooked content from Chinese social media</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="videoplayback2.mp4" data-title="Florida Man Moments" data-description="Classic Florida man moments that defy logic. Only in Florida does this kind of stuff happen regularly." data-year="2024" data-rating="4.7" data-duration="3:30" data-tags="florida,usa,funny">
+              <img src="images/c.png" alt="American Brainrot">
+              <div class="video-overlay">
+                <h3>Florida Man Moments</h3>
+                <p>Classic Florida man moments that defy logic</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="videoplayback (3).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/v.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download.mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/11.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (24).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/12.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (23).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/13.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (22).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/14.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (21).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/15.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (21).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/16.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (20).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/17.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (19).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/18.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (18).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/19.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (17).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/20.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (16).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/21.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (15).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/22.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (14).mp4" data-title="Hardbass Gopnik" data-description="Slavic energy at its finest. Squatting, hardbass, and tracksuits - the holy trinity of gopnik culture." data-year="2023" data-rating="4.3" data-duration="1:18" data-tags="russian,slav,gopnik">
+              <img src="images/23.png" alt="Russian Brainrot">
+              <div class="video-overlay">
+                <h3>Hardbass Gopnik</h3>
+                <p>Slavic energy at its finest</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="category">
+          <div class="section-header">
+            <h2 class="section-title">Premium Brainrot</h2>
+            <a href="#" class="view-all">View All</a>
+          </div>
+          <div class="video-grid">
+            <div class="video-card" data-video="Download (13).mp4" data-title="Brazilian Funk Chaos" data-description="When the funk hits just right. Brazilian funk parties taken to the extreme with wild energy and crazy dance moves." data-year="2024" data-rating="4.8" data-duration="1:45" data-tags="brazilian,funk,dance">
+              <img src="images/24.png" alt="Brazilian Brainrot">
+              <div class="video-overlay">
+                <h3>Brazilian Funk Chaos</h3>
+                <p>When the funk hits just right</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (12).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/25.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (11).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/26.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (10).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/27.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (9).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/28.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (8).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/29.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (7).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/30.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (6).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/31.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (5).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/32.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (4).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/33.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (3).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/34.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (2).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="35.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="video-card" data-video="Download (1).mp4" data-title="Indian TikTok Gold" data-description="Bollywood meets internet culture. The most extra TikTok content coming straight from India." data-year="2023" data-rating="4.1" data-duration="2:22" data-tags="indian,tiktok,bollywood">
+              <img src="images/36.png" alt="Indian Brainrot">
+              <div class="video-overlay">
+                <h3>Indian TikTok Gold</h3>
+                <p>Bollywood meets internet culture</p>
+                <div class="video-actions">
+                  <button class="action-btn">
+                    <i class="fas fa-play"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-thumbs-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="featured">
+        <div class="featured-content">
+          <div class="featured-image">
+            <span class="featured-badge">FEATURED</span>
+            <img src="images/123.png" alt="Featured Brainrot">
+          </div>
+          <div class="featured-info">
+            <h2>Italian Zoomer Madness</h2>
+            <p>
+              The most comprehensive collection of Italian zoomer content ever
+              assembled. Witness the evolution of this unique internet
+              subculture through carefully curated clips that showcase their
+              distinctive brand of humor and energy.
+            </p>
+            <div class="featured-stats">
+              <div class="stat-item">
+                <div class="stat-number">250+</div>
+                <div class="stat-label">Videos</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">4.7</div>
+                <div class="stat-label">Rating</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">5h+</div>
+                <div class="stat-label">Content</div>
+              </div>
+            </div>
+            <button class="btn btn-primary pulse">
+              <i class="fas fa-play"></i> Watch Now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Video Modal -->
+      <div class="modal" id="videoModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title" id="modalTitle">Video Title</div>
+            <button class="close-modal" id="closeModal">�</button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-video" id="modalVideoContainer">
+              <!-- Video will be inserted here -->
+            </div>
+            <div class="modal-info">
+              <div style="display: none" class="modal-poster">
+                <img src="" alt="Video Poster" id="modalPoster">
+              </div>
+              <div class="modal-details">
+                <div class="modal-meta">
+                  <div class="modal-rating" id="modalRating">
+                    <i class="fas fa-star"></i> 4.5
+                  </div>
+                  <div class="modal-year" id="modalYear">2024</div>
+                  <div class="modal-duration" id="modalDuration">0:42</div>
+                </div>
+                <p class="modal-description" id="modalDescription">
+                  Video description goes here.
+                </p>
+                <div class="modal-tags" id="modalTags">
+                  <!-- Tags will be inserted here -->
+                </div>
+                <div class="modal-actions">
+                  <button class="btn btn-primary">
+                    <i class="fas fa-play"></i> Play
+                  </button>
+                  <button class="btn btn-secondary">
+                    <i class="fas fa-plus"></i> My List
+                  </button>
+                  <button class="btn btn-secondary">
+                    <i class="fas fa-share"></i> Share
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-content">
+          <div class="footer-column">
+            <h3>TrenchesCooked</h3>
+            <ul class="footer-links">
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Press</a></li>
+              <li><a href="#">Investor Relations</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Help</h3>
+            <ul class="footer-links">
+              <li><a href="#">Account</a></li>
+              <li><a href="#">Plans</a></li>
+              <li><a href="#">Billing</a></li>
+              <li><a href="#">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Legal</h3>
+            <ul class="footer-links">
+              <li><a href="#">Privacy</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Cookie Preferences</a></li>
+              <li><a href="#">Corporate Information</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Connect</h3>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>
+            � 2025 TrenchesCooked. All rights reserved. (Not really, this is a
+            parody)
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Welcome Screen
+      const welcomeScreen = document.getElementById("welcomeScreen");
+      const mainContent = document.getElementById("mainContent");
+      const startTrialBtn = document.getElementById("startTrial");
+      const learnMoreBtn = document.getElementById("learnMore");
+
+      // При нажатии на кнопку Start Free Trial
+      startTrialBtn.addEventListener("click", () => {
+        // Плавно скрываем welcome screen
+        welcomeScreen.classList.add("hidden");
+
+        // Показываем основной контент
+        mainContent.style.display = "block";
+
+        // Показываем хедер и футер
+        document.querySelector("header").style.display = "flex";
+        document.querySelector("footer").style.display = "block";
+
+        // После завершения анимации скрытия полностью удаляем welcome screen
+        setTimeout(() => {
+          welcomeScreen.style.display = "none";
+        }, 500);
+      });
+
+      // При нажатии на кнопку Learn More
+      learnMoreBtn.addEventListener("click", () => {
+        alert(
+          "TrenchesCooked is a premium brainrot video platform featuring the most cooked content from around the world. Start your free trial to access unlimited videos!"
+        );
+      });
+
+      // Header scroll effect
+      window.addEventListener("scroll", function () {
+        const header = document.querySelector("header");
+        if (header) {
+          header.classList.toggle("scrolled", window.scrollY > 100);
+        }
+      });
+
+      // Carousel navigation
+      const trendingCarousel = document.getElementById("trendingCarousel");
+      const prevTrending = document.getElementById("prevTrending");
+      const nextTrending = document.getElementById("nextTrending");
+
+      if (nextTrending && prevTrending) {
+        nextTrending.addEventListener("click", () => {
+          trendingCarousel.scrollBy({ left: 300, behavior: "smooth" });
+        });
+
+        prevTrending.addEventListener("click", () => {
+          trendingCarousel.scrollBy({ left: -300, behavior: "smooth" });
+        });
+      }
+
+      // Video modal
+      const videoModal = document.getElementById("videoModal");
+      const videoCards = document.querySelectorAll(".video-card");
+      const modalVideoContainer = document.getElementById(
+        "modalVideoContainer"
+      );
+      const closeModal = document.getElementById("closeModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalPoster = document.getElementById("modalPoster");
+      const modalDescription = document.getElementById("modalDescription");
+      const modalRating = document.getElementById("modalRating");
+      const modalYear = document.getElementById("modalYear");
+      const modalDuration = document.getElementById("modalDuration");
+      const modalTags = document.getElementById("modalTags");
+
+      if (videoCards.length > 0) {
+        videoCards.forEach((card) => {
+          card.addEventListener("click", () => {
+            const videoId = card.getAttribute("data-video");
+            const title = card.getAttribute("data-title");
+            const description = card.getAttribute("data-description");
+            const year = card.getAttribute("data-year");
+            const rating = card.getAttribute("data-rating");
+            const duration = card.getAttribute("data-duration");
+            const tags = card.getAttribute("data-tags").split(",");
+            const poster = card.querySelector("img").src;
+
+            modalTitle.textContent = title;
+            modalDescription.textContent = description;
+            modalRating.innerHTML = `<i class="fas fa-star"></i> ${rating}`;
+            modalYear.textContent = year;
+            modalDuration.textContent = duration;
+            modalPoster.src = poster;
+
+            modalTags.innerHTML = "";
+            tags.forEach((tag) => {
+              const tagElement = document.createElement("div");
+              tagElement.className = "modal-tag";
+              tagElement.textContent = tag;
+              modalTags.appendChild(tagElement);
+            });
+
+            modalVideoContainer.innerHTML = `
+            <video autoplay loop src="${videoId}"></video>
+                      
+                  `;
+
+            videoModal.classList.add("show");
+            document.body.style.overflow = "hidden";
+          });
+        });
+
+        closeModal.addEventListener("click", () => {
+          videoModal.classList.remove("show");
+          setTimeout(() => {
+            modalVideoContainer.innerHTML = "";
+          }, 300);
+          document.body.style.overflow = "auto";
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener("click", (e) => {
+          if (e.target === videoModal) {
+            videoModal.classList.remove("show");
+            setTimeout(() => {
+              modalVideoContainer.innerHTML = "";
+            }, 300);
+            document.body.style.overflow = "auto";
+          }
+        });
+      }
+    </script>
+  
+
+</body></html>
